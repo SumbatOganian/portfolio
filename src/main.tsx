@@ -8,12 +8,14 @@ import projects from '../data/projects.json';
 import skills from '../data/skills.json';
 import config from '../data/site-config.json';
 import './style.css';
+import {startupStep,startupFinished,visualStartupReady} from './startup';
 import {PortraitJourney} from './PortraitJourney';
 import {KineticText} from './KineticText';
 import {ProjectPreview} from './ProjectPreview';
 import {ShuffleNavLink} from './ShuffleNavLink';
 import './art-direction-v4.css';
 gsap.registerPlugin(ScrollTrigger);
+startupStep('interface');
 const icons = [siPython,siDjango,siJavascript,siHtml5,siGit];
 const clamp=(v:number,a=0,b=1)=>Math.max(a,Math.min(b,v));
 const mix=(a:number,b:number,t:number)=>a+(b-a)*t;
@@ -38,9 +40,14 @@ function App(){
  };
  useEffect(()=>{const q=matchMedia('(prefers-reduced-motion: reduce)');const update=()=>setReduced(q.matches);q.addEventListener('change',update);return()=>q.removeEventListener('change',update)},[]);
  useEffect(()=>{
-  if(reduced||noGL||staticMode||!canvas.current)return;
+  document.fonts.ready.then(()=>startupStep('fonts'));
+  const timer=setTimeout(()=>{if(!startupFinished()){setNoGL(true);startupStep('fonts')}},15000);
+  return()=>clearTimeout(timer);
+ },[]);
+ useEffect(()=>{
+  if(reduced||noGL||staticMode||!canvas.current){const frame=requestAnimationFrame(visualStartupReady);return()=>cancelAnimationFrame(frame)};
   let disposed=false,cleanup:(()=>void)|undefined;
-  import('./scene').then(({createScene})=>createScene(canvas.current!,motion.current,()=>{if(!disposed)setNoGL(true)})).then(fn=>{if(disposed)fn();else cleanup=fn}).catch(()=>{if(!disposed)setNoGL(true)});
+  import('./scene').then(({createScene})=>{if(disposed)return()=>{};startupStep('engine');return createScene(canvas.current!,motion.current,()=>{if(!disposed)setNoGL(true)},{onAssetReady:asset=>{if(!disposed)startupStep(asset)},onReady:()=>{if(!disposed)startupStep('frame')}})}).then(fn=>{if(disposed)fn();else cleanup=fn}).catch(()=>{if(!disposed)setNoGL(true)});
   return()=>{disposed=true;cleanup?.()};
  },[reduced,noGL,staticMode]);
  useEffect(()=>{

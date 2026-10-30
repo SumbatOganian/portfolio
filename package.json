@@ -17,6 +17,7 @@
     "qa:typing": "node scripts/qa-typing.mjs",
     "qa:colour": "node scripts/qa-colour-reveal.mjs",
     "qa:exit": "node scripts/qa-exit-treatment.mjs",
+    "qa:startup": "node scripts/qa-startup.mjs",
     "models": "node scripts/generate-sculpture.mjs",
     "capture:full": "node scripts/capture-full-previews.mjs",
     "review": "node scripts/review-v4.mjs"

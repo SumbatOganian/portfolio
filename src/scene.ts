@@ -5,7 +5,9 @@ import {HDRLoader} from 'three/addons/loaders/HDRLoader.js';
 type Motion={progress:number,pointerX:number,pointerY:number,mobile:boolean};
 const clamp=(v:number)=>Math.min(1,Math.max(0,v));
 const smooth=(v:number)=>{v=clamp(v);return v*v*(3-2*v)};
-export async function createScene(canvas:HTMLCanvasElement,motion:Motion,fail:()=>void){
+type SceneAsset='sculpture'|'rocks'|'albedo'|'height'|'environment';
+type SceneLoading={onAssetReady?:(asset:SceneAsset)=>void,onReady?:()=>void};
+export async function createScene(canvas:HTMLCanvasElement,motion:Motion,fail:()=>void,loading:SceneLoading={}){
  const renderer=new T.WebGLRenderer({canvas,alpha:true,antialias:true,powerPreference:'high-performance'});
  renderer.setPixelRatio(Math.min(devicePixelRatio,innerWidth<1024?1.25:1.6));renderer.setClearColor(0,0);renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.16;
  const scene=new T.Scene(),camera=new T.PerspectiveCamera(34,innerWidth/innerHeight,.1,80);camera.position.set(0,0,10.6);
@@ -16,7 +18,8 @@ export async function createScene(canvas:HTMLCanvasElement,motion:Motion,fail:()
  const pmrem=new T.PMREMGenerator(renderer);let env=pmrem.fromScene(studio,.025);scene.environment=env.texture;pmrem.dispose();studio.traverse(o=>{if(o instanceof T.Mesh){o.geometry.dispose();(o.material as T.Material).dispose()}});
  scene.add(new T.AmbientLight(0xcbd1da,.22));const key=new T.DirectionalLight(0xe6ebf1,3.8);key.position.set(-3,6,4);scene.add(key);const rim=new T.DirectionalLight(0xf1f1ec,4.2);rim.position.set(4,4,-2);scene.add(rim);const fill=new T.DirectionalLight(0x899bb4,.6);fill.position.set(1,-2,4);scene.add(fill);
  const loader=new GLTFLoader(),textureLoader=new T.TextureLoader();
- const [sculpture,rocks,albedo,height,hdr]=await Promise.all([loader.loadAsync(assetUrl('/models/chrome_sculpture.glb')),loader.loadAsync(assetUrl('/models/floating_rocks.glb')),textureLoader.loadAsync(assetUrl('/textures/basalt-albedo.webp')),textureLoader.loadAsync(assetUrl('/textures/basalt-height.png')),new HDRLoader().loadAsync(assetUrl('/environment/studio_small_09_1k.hdr'))]).catch(e=>{renderer.dispose();env.dispose();throw e});
+ const loaded=<V,>(name:SceneAsset,promise:Promise<V>)=>promise.then(value=>{loading.onAssetReady?.(name);return value});
+ const [sculpture,rocks,albedo,height,hdr]=await Promise.all([loaded('sculpture',loader.loadAsync(assetUrl('/models/chrome_sculpture.glb'))),loaded('rocks',loader.loadAsync(assetUrl('/models/floating_rocks.glb'))),loaded('albedo',textureLoader.loadAsync(assetUrl('/textures/basalt-albedo.webp'))),loaded('height',textureLoader.loadAsync(assetUrl('/textures/basalt-height.png'))),loaded('environment',new HDRLoader().loadAsync(assetUrl('/environment/studio_small_09_1k.hdr')))]).catch(e=>{renderer.dispose();env.dispose();throw e});
  const hdrPMREM=new T.PMREMGenerator(renderer);const photoEnvironment=hdrPMREM.fromEquirectangular(hdr);hdrPMREM.dispose();hdr.dispose();env.dispose();env=photoEnvironment;scene.environment=env.texture;scene.environmentRotation.set(0,1.35,0);
  albedo.colorSpace=T.SRGBColorSpace;[albedo,height].forEach(t=>{t.wrapS=t.wrapT=T.RepeatWrapping;t.repeat.set(1.6,1.6);t.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy())});
  const object=sculpture.scene,stones=rocks.scene;scene.add(object,stones);
@@ -34,7 +37,7 @@ export async function createScene(canvas:HTMLCanvasElement,motion:Motion,fail:()
  const fragments=new T.Group(),fragmentGeometry=new T.IcosahedronGeometry(1,0),fragmentMaterial=new T.MeshStandardMaterial({color:0x292b2e,roughness:.7,map:albedo});
  for(let i=0;i<26;i++){const mesh=new T.Mesh(fragmentGeometry,fragmentMaterial);const t=i*2.399;mesh.position.set(1.6+Math.sin(t)*(1.5+(i%4)*.3),Math.cos(t*1.3)*3.3,-.8-(i%5)*.6);mesh.scale.setScalar(.018+(i%4)*.014);mesh.rotation.set(t,t*.7,t*.3);fragments.add(mesh)}scene.add(fragments);
  let inView=true;const observer=new IntersectionObserver(entries=>{inView=entries[0].isIntersecting});observer.observe(canvas);
- let raf=0,visible=true,alive=true,px=0,py=0,last=0;
+ let raf=0,visible=true,alive=true,firstFrame=true,px=0,py=0,last=0;
  const resize=()=>{renderer.setSize(innerWidth,innerHeight,false);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix()};resize();
  const contextLost=(e:Event)=>{e.preventDefault();fail()};canvas.addEventListener('webglcontextlost',contextLost);
  const visibility=()=>{visible=!document.hidden};document.addEventListener('visibilitychange',visibility);window.addEventListener('resize',resize);
@@ -47,6 +50,7 @@ export async function createScene(canvas:HTMLCanvasElement,motion:Motion,fail:()
   stones.children.forEach((o,i)=>{const b=rockBases.get(o)!;o.position.set(b.x+px*(i>8?.055:.035)*(i%3+1),b.y+py*.04-p*(i%3+1)*.11,b.z);o.rotation.x+=dt*.003*(i%2?1:-1);if(mobile&&i===0)o.position.set(-2.5,.3,-1);if(mobile&&i===9)o.position.set(4.2,-4.0,-.5);if(mobile&&i===10)o.position.set(-3.8,-3.7,.3)});
   orbits.rotation.y=px*.03;fragments.position.set(px*.035,py*.025-p*.4,0);hazeMaterial.uniforms.uTime.value=time*.001;
   renderer.render(scene,camera);
+  if(firstFrame){firstFrame=false;requestAnimationFrame(()=>{if(alive)loading.onReady?.()})}
  }
  raf=requestAnimationFrame(draw);
  return()=>{observer.disconnect();alive=false;cancelAnimationFrame(raf);window.removeEventListener('resize',resize);document.removeEventListener('visibilitychange',visibility);canvas.removeEventListener('webglcontextlost',contextLost);scene.traverse(o=>{if(o instanceof T.Mesh||o instanceof T.Line){o.geometry.dispose();const materials=Array.isArray(o.material)?o.material:[o.material];materials.forEach(m=>m.dispose())}});albedo.dispose();height.dispose();env.dispose();renderer.dispose()};
