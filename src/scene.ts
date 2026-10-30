@@ -41,7 +41,7 @@ export async function createScene(canvas:HTMLCanvasElement,motion:Motion,fail:()
  const resize=()=>{renderer.setSize(innerWidth,innerHeight,false);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix()};resize();
  const contextLost=(e:Event)=>{e.preventDefault();fail()};canvas.addEventListener('webglcontextlost',contextLost);
  const visibility=()=>{visible=!document.hidden};document.addEventListener('visibilitychange',visibility);window.addEventListener('resize',resize);
- function draw(time:number){if(!alive)return;raf=requestAnimationFrame(draw);if(!visible||!inView)return;
+ function draw(time:number){if(!alive)return;raf=requestAnimationFrame(draw);if(!visible||(!inView&&!firstFrame))return;
   const dt=Math.min((time-last)/1000,.05);last=time;px=T.MathUtils.damp(px,motion.pointerX,4,dt);py=T.MathUtils.damp(py,motion.pointerY,4,dt);
   const p=motion.progress,mobile=innerWidth<1024,retreat=smooth((p-.13)/.26),close=0;
   object.position.set(mobile?.35:1.90*(1-retreat)+.3*close,mobile?-1.42+1.2*smooth(p/.18):.05,-retreat*3);
