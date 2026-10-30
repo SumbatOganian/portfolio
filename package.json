@@ -1,0 +1,44 @@
+{
+  "name": "digital-matter",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "capture": "node scripts/capture_project_previews.mjs",
+    "verify:previews": "node scripts/verify_previews.mjs",
+    "qa": "node scripts/qa-v8.mjs",
+    "qa:finale": "node scripts/qa-v11.mjs",
+    "qa:header": "node scripts/qa-header.mjs",
+    "qa:motion": "node scripts/qa-v14.mjs",
+    "review:about": "node scripts/review-about.mjs",
+    "qa:typing": "node scripts/qa-typing.mjs",
+    "qa:colour": "node scripts/qa-colour-reveal.mjs",
+    "qa:exit": "node scripts/qa-exit-treatment.mjs",
+    "models": "node scripts/generate-sculpture.mjs",
+    "capture:full": "node scripts/capture-full-previews.mjs",
+    "review": "node scripts/review-v4.mjs"
+  },
+  "dependencies": {
+    "@fontsource-variable/roboto-flex": "^5.3.0",
+    "@fontsource/cormorant-garamond": "^5.3.0",
+    "@fontsource/manrope": "^5.2.0",
+    "gsap": "^3.13.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "simple-icons": "^15.0.0",
+    "three": "^0.180.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@types/three": "^0.180.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "playwright": "^1.55.0",
+    "sharp": "^0.35.5",
+    "typescript": "~5.9.0",
+    "vite": "^7.1.0"
+  }
+}

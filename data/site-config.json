@@ -1,0 +1,58 @@
+{
+  "displayName": "Sumbat Oganian",
+  "siteLabel": "Developer Portfolio",
+  "roleLabel": "WEB DEVELOPER",
+  "headline": [
+    "ИДЕИ.",
+    "КОД.",
+    "РЕЗУЛЬТАТ."
+  ],
+  "heroDescription": "Создаю веб-приложения и сайты с вниманием к дизайну, логике и реальным результатам.",
+  "githubUrl": "https://github.com/SumbatOganian",
+  "email": null,
+  "telegramUrl": null,
+  "resumePublicPath": null,
+  "ctaProjectsLabel": "Смотреть проекты",
+  "theme": "monolith-chrome",
+  "careerLine": "Frontend / Backend · Junior / Intern",
+  "personalStatement": [
+    "Меня вдохновляет то, как технологии меняют привычные вещи.",
+    "Я постоянно учусь — и превращаю любопытство в код.",
+    "Хочу создавать продукты, которые делают чью-то жизнь лучше."
+  ],
+  "socials": [
+    {
+      "id": "telegram",
+      "label": "Telegram",
+      "url": "https://t.me/Sumbat_O"
+    },
+    {
+      "id": "max",
+      "label": "MAX",
+      "url": "https://max.ru/u/f9LHodD0cOKZIV3XpRj4IEd7wtE4cKSw2C-956gp3LqmnAJPXLXm-NCPiSg"
+    },
+    {
+      "id": "vk",
+      "label": "VK",
+      "url": "https://vk.ru/id209397885"
+    },
+    {
+      "id": "instagram",
+      "label": "Instagram",
+      "url": "https://www.instagram.com/sumbat_oganian/"
+    },
+    {
+      "id": "github",
+      "label": "GitHub",
+      "url": "https://github.com/SumbatOganian"
+    }
+  ],
+  "about": {
+    "label": "ОБО МНЕ",
+    "title": "Интерес стал делом.",
+    "paragraphs": [
+      "Веб-разработка давно меня притягивала. Год назад, в 30 лет, я сделал первый шаг — начал учиться в IT-академии.",
+      "Теперь хочу расти в этой сфере и создавать продукты, в которых есть смысл, польза и внимание к человеку."
+    ]
+  }
+}

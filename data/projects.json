@@ -1,0 +1,87 @@
+[
+  {
+    "id": "invitecraft",
+    "name": "InviteCraft",
+    "url": "https://invite-craft.ru/",
+    "github": null,
+    "category": "web application",
+    "oneLineFact": "Конструктор сайтов-приглашений с авторскими дизайнами и RSVP",
+    "previewStatus": "CAPTURED_REAL_BROWSER",
+    "desktopPreview": "/project-previews/invitecraft-desktop.png",
+    "mobilePreview": "/project-previews/invitecraft-mobile.png",
+    "previewFocalPoint": "50% 25%",
+    "cardOrder": 1,
+    "previewCapturedAt": "2026-10-30T11:01:55.546Z"
+  },
+  {
+    "id": "verdi",
+    "name": "Verdi",
+    "url": "https://sumbatoganian.github.io/Verdi/",
+    "github": "https://github.com/SumbatOganian/Verdi",
+    "category": "static website",
+    "oneLineFact": "Сайт мебельной студии: услуги, галерея, форма заявки",
+    "technologiesVerifiedFromRepo": [
+      "HTML",
+      "CSS",
+      "JavaScript"
+    ],
+    "previewStatus": "CAPTURED_REAL_BROWSER",
+    "desktopPreview": "/project-previews/verdi-desktop.png",
+    "mobilePreview": "/project-previews/verdi-mobile.png",
+    "previewFocalPoint": "50% 25%",
+    "cardOrder": 2,
+    "previewCapturedAt": "2026-10-30T11:02:10.655Z"
+  },
+  {
+    "id": "pulse",
+    "name": "Pulse",
+    "url": "https://sumbatoganian.github.io/Pulse/",
+    "github": "https://github.com/SumbatOganian/Pulse",
+    "category": "static website",
+    "oneLineFact": "Сайт digital-команды: портфолио, модальные окна и адаптивная навигация",
+    "technologiesVerifiedFromRepo": [
+      "HTML",
+      "CSS",
+      "JavaScript"
+    ],
+    "previewStatus": "CAPTURED_REAL_BROWSER",
+    "desktopPreview": "/project-previews/pulse-desktop.png",
+    "mobilePreview": "/project-previews/pulse-mobile.png",
+    "previewFocalPoint": "50% 25%",
+    "cardOrder": 3,
+    "previewCapturedAt": "2026-10-30T11:02:22.415Z"
+  },
+  {
+    "id": "tochka-sborki",
+    "name": "Tochka Sborki",
+    "url": "https://sumbatoganian.github.io/Tochka-Sborki/",
+    "github": "https://github.com/SumbatOganian/Tochka-Sborki",
+    "category": "static website",
+    "oneLineFact": "Сайт онлайн-школы IT: каталог учебных программ и страницы курсов",
+    "technologiesVerifiedFromRepo": [
+      "HTML",
+      "CSS",
+      "JavaScript"
+    ],
+    "previewStatus": "CAPTURED_REAL_BROWSER",
+    "desktopPreview": "/project-previews/tochka-sborki-desktop.png",
+    "mobilePreview": "/project-previews/tochka-sborki-mobile.png",
+    "previewFocalPoint": "50% 25%",
+    "cardOrder": 4,
+    "previewCapturedAt": "2026-10-30T11:02:54.126Z"
+  },
+  {
+    "id": "povodinvite",
+    "name": "Povodinvite",
+    "url": "https://povodinvite.ru/",
+    "github": null,
+    "category": "website",
+    "oneLineFact": "Отдельный сайт-приглашения: готовые и индивидуальные дизайны",
+    "previewStatus": "CAPTURED_REAL_BROWSER",
+    "desktopPreview": "/project-previews/povodinvite-desktop.png",
+    "mobilePreview": "/project-previews/povodinvite-mobile.png",
+    "previewFocalPoint": "50% 25%",
+    "cardOrder": 5,
+    "previewCapturedAt": "2026-10-30T11:03:01.902Z"
+  }
+]

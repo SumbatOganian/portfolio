@@ -1,0 +1,47 @@
+[
+  {
+    "id": "invitecraft",
+    "url": "https://invite-craft.ru/",
+    "status": 200,
+    "title": "InviteCraft — приглашения с характером",
+    "width": 1440,
+    "height": 4527,
+    "capturedAt": "2026-10-30T12:25:14.849Z"
+  },
+  {
+    "id": "verdi",
+    "url": "https://sumbatoganian.github.io/Verdi/",
+    "status": 200,
+    "title": "Verdi",
+    "width": 1440,
+    "height": 2569,
+    "capturedAt": "2026-10-30T12:25:28.872Z"
+  },
+  {
+    "id": "pulse",
+    "url": "https://sumbatoganian.github.io/Pulse/",
+    "status": 200,
+    "title": "Pulse",
+    "width": 1440,
+    "height": 5535,
+    "capturedAt": "2026-10-30T12:25:48.180Z"
+  },
+  {
+    "id": "povodinvite",
+    "url": "https://povodinvite.ru/",
+    "status": 200,
+    "title": "По поводу — сайты-приглашения для особенных событий",
+    "width": 1440,
+    "height": 7086,
+    "capturedAt": "2026-10-30T12:26:04.493Z"
+  },
+  {
+    "id": "tochka-sborki",
+    "url": "https://sumbatoganian.github.io/Tochka-Sborki/",
+    "status": 200,
+    "title": "Точка сборки — собери себя в IT",
+    "width": 1440,
+    "height": 1128,
+    "capturedAt": "2026-10-30T12:33:59.330Z"
+  }
+]

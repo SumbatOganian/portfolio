@@ -1,0 +1,82 @@
+[
+  {
+    "project": "invitecraft",
+    "mode": "desktop",
+    "url": "https://invite-craft.ru/",
+    "status": 200,
+    "title": "InviteCraft — приглашения с характером",
+    "capturedAt": "2026-10-30T11:01:50.046Z"
+  },
+  {
+    "project": "invitecraft",
+    "mode": "mobile",
+    "url": "https://invite-craft.ru/",
+    "status": 200,
+    "title": "InviteCraft — приглашения с характером",
+    "capturedAt": "2026-10-30T11:01:55.546Z"
+  },
+  {
+    "project": "verdi",
+    "mode": "desktop",
+    "url": "https://sumbatoganian.github.io/Verdi/",
+    "status": 200,
+    "title": "Verdi",
+    "capturedAt": "2026-10-30T11:02:04.201Z"
+  },
+  {
+    "project": "verdi",
+    "mode": "mobile",
+    "url": "https://sumbatoganian.github.io/Verdi/",
+    "status": 200,
+    "title": "Verdi",
+    "capturedAt": "2026-10-30T11:02:10.655Z"
+  },
+  {
+    "project": "pulse",
+    "mode": "desktop",
+    "url": "https://sumbatoganian.github.io/Pulse/",
+    "status": 200,
+    "title": "Pulse",
+    "capturedAt": "2026-10-30T11:02:17.065Z"
+  },
+  {
+    "project": "pulse",
+    "mode": "mobile",
+    "url": "https://sumbatoganian.github.io/Pulse/",
+    "status": 200,
+    "title": "Pulse",
+    "capturedAt": "2026-10-30T11:02:22.415Z"
+  },
+  {
+    "project": "tochka-sborki",
+    "mode": "desktop",
+    "url": "https://sumbatoganian.github.io/Tochka-Sborki/",
+    "status": 200,
+    "title": "Точка сборки — собери себя в IT",
+    "capturedAt": "2026-10-30T11:02:48.054Z"
+  },
+  {
+    "project": "tochka-sborki",
+    "mode": "mobile",
+    "url": "https://sumbatoganian.github.io/Tochka-Sborki/",
+    "status": 200,
+    "title": "Точка сборки — собери себя в IT",
+    "capturedAt": "2026-10-30T11:02:54.126Z"
+  },
+  {
+    "project": "povodinvite",
+    "mode": "desktop",
+    "url": "https://povodinvite.ru/",
+    "status": 200,
+    "title": "По поводу — сайты-приглашения для особенных событий",
+    "capturedAt": "2026-10-30T11:02:57.917Z"
+  },
+  {
+    "project": "povodinvite",
+    "mode": "mobile",
+    "url": "https://povodinvite.ru/",
+    "status": 200,
+    "title": "По поводу — сайты-приглашения для особенных событий",
+    "capturedAt": "2026-10-30T11:03:01.902Z"
+  }
+]

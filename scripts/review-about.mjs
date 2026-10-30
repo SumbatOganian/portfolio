@@ -1,0 +1,18 @@
+import {chromium,webkit,devices} from 'playwright';
+import fs from 'node:fs/promises';
+import assert from 'node:assert/strict';
+const base=process.env.QA_BASE_URL||'http://127.0.0.1:5173';await fs.mkdir('qa/v16',{recursive:true});const results=[],errors=[];
+async function about(page,p=.81){await page.evaluate(p=>{const el=document.querySelector('#person');scrollTo(0,el.offsetTop+(el.offsetHeight-innerHeight)*p)},p);await page.waitForFunction(p=>Math.abs(+document.querySelector('.journey-stage').dataset.progress-p)<.002,p);await page.locator('.portrait-subject').evaluate(img=>img.decode());await page.waitForTimeout(400)}
+const browser=await chromium.launch({channel:'chrome',headless:true});
+try{
+ const page=await browser.newPage();page.on('pageerror',e=>errors.push(e.message));await page.goto(base);await page.evaluate(()=>document.fonts.ready);await page.waitForTimeout(600);
+ for(const [width,height] of [[320,568],[390,844],[768,900],[1024,768],[1440,900],[1920,1080],[844,390]]){
+  await page.setViewportSize({width,height});await page.waitForTimeout(400);await about(page);
+  const box=await page.locator('.portrait-about').boundingBox();assert.ok(box.x>=0&&box.y>=80&&box.x+box.width<=width&&box.y+box.height<=height-8);assert.equal(await page.locator('.portrait-about').evaluate(el=>+getComputedStyle(el).opacity),1);assert.equal(await page.locator('.personal-intro').evaluate(el=>getComputedStyle(el).visibility),'hidden');assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
+  await page.screenshot({path:`qa/v16/about-${width}x${height}.png`});results.push(`${width}×${height}: biography fits below the header and inside the viewport`);
+ }
+ await page.setViewportSize({width:1440,height:900});await page.waitForTimeout(400);await about(page,.25);assert.equal(await page.locator('.portrait-about').evaluate(el=>getComputedStyle(el).visibility),'hidden');await about(page,.81);await about(page,1);assert.ok(Math.abs((await page.locator('#contact').boundingBox()).x)<1);results.push('Biography appears after the introductory text dissolves; horizontal finale preserved');
+ const flat=await browser.newPage({viewport:{width:390,height:844},reducedMotion:'reduce'});await flat.goto(base);await flat.evaluate(()=>document.fonts.ready);await flat.locator('.portrait-about').scrollIntoViewIfNeeded();await flat.waitForTimeout(500);assert.equal(await flat.locator('.portrait-about').evaluate(el=>getComputedStyle(el).visibility),'visible');await flat.screenshot({path:'qa/v16/about-reduced-motion.png'});await flat.locator('.navigation a[href="#contact"]').evaluate(el=>el.click());await flat.waitForFunction(()=>Math.abs(document.querySelector('#contact').getBoundingClientRect().y)<2);await flat.close();results.push('Reduced motion: full biography in normal flow, contact navigation intact');assert.deepEqual(errors,[]);
+}finally{await browser.close();await fs.writeFile('qa/v16/results.json',JSON.stringify({results,errors},null,2))}
+const safari=await webkit.launch();try{const ctx=await safari.newContext({...devices['iPhone 13']}),page=await ctx.newPage();await page.goto(base);await page.evaluate(()=>document.fonts.ready);await page.waitForTimeout(500);await about(page);const box=await page.locator('.portrait-about').boundingBox();assert.ok(box.y>=80&&box.y+box.height<=page.viewportSize().height-8);await page.screenshot({path:'qa/v16/webkit-about.png'});await ctx.close();results.push('WebKit iPhone: portrait and biography fit')}finally{await safari.close();await fs.writeFile('qa/v16/results.json',JSON.stringify({results,errors},null,2))}
+console.log(results.join('\n'));

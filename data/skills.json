@@ -1,0 +1,8 @@
+[
+  {"id":"python","name":"Python","status":"primary-career-focus","show":true,"notes":"Целевое направление — Python Backend Junior / Intern; не заявлять стаж или профессиональный уровень."},
+  {"id":"django","name":"Django","status":"used-in-invitecraft","show":true,"notes":"Продукт InviteCraft: использование Django подтверждается контекстом проекта; не утверждать полностью самостоятельную реализацию."},
+  {"id":"javascript","name":"JavaScript","status":"repo-evidence","show":true,"notes":"Код из репозиториев Verdi, Pulse, Tochka Sborki."},
+  {"id":"html-css","name":"HTML / CSS","status":"repo-evidence","show":true,"notes":"Адаптивные статические сайты в GitHub."},
+  {"id":"git","name":"Git","status":"repo-evidence","show":true,"notes":"GitHub-репозитории доступны; без рейтингов навыка."},
+  {"id":"postgresql","name":"PostgreSQL","status":"unverified","show":false,"notes":"Показывать только после самостоятельного подтверждения пользователем и проверки."}
+]

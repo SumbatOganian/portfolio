@@ -1,0 +1,5 @@
+import {chromium} from 'playwright';import fs from 'node:fs/promises';
+await fs.mkdir('qa/v3',{recursive:true});const b=await chromium.launch({channel:'chrome',headless:true});const p=await b.newPage({viewport:{width:1440,height:900}});p.on('pageerror',e=>console.log('ERROR',e.message));await p.goto('http://127.0.0.1:4173');await p.waitForTimeout(1800);
+async function go(v){await p.bringToFront();await p.evaluate(v=>{const el=document.querySelector('.portrait-journey');scrollTo(0,el.offsetTop+(el.offsetHeight-innerHeight)*v)},v);await p.waitForFunction(v=>Math.abs(+document.querySelector('.journey-stage').dataset.progress-v)<.006,v);await p.waitForTimeout(250)}
+await p.screenshot({path:'qa/v3/desktop-hero.png'});for(const [name,v]of [['intro',.28],['portrait',.47],['portrait-colour',.60],['finale',1]]){await go(v);await p.screenshot({path:`qa/v3/desktop-${name}.png`})}
+await p.setViewportSize({width:390,height:844});await p.waitForTimeout(800);for(const [name,v]of [['intro',.28],['portrait',.47],['finale',1]]){await go(v);await p.screenshot({path:`qa/v3/mobile-${name}.png`})}console.log('Screenshots saved');await b.close();

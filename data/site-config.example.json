@@ -1,0 +1,13 @@
+{
+  "displayName": "Sumbat Oganian",
+  "siteLabel": "Developer Portfolio",
+  "roleLabel": "PYTHON / DJANGO DEVELOPER",
+  "headline": ["ИДЕИ.", "КОД.", "РЕЗУЛЬТАТ."],
+  "heroDescription": "Создаю веб-приложения и сайты с вниманием к дизайну, логике и реальным результатам.",
+  "githubUrl": "https://github.com/SumbatOganian",
+  "email": null,
+  "telegramUrl": null,
+  "resumePublicPath": null,
+  "ctaProjectsLabel": "Смотреть проекты",
+  "theme": "monolith-chrome"
+}
