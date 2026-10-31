@@ -9,3 +9,6 @@ html{scrollbar-gutter:stable}.project-open{position:absolute;inset:0;display:blo
 
 /* Mobile screen fills the space between Preview and the project title. */
 @media(max-width:1023px){.inline-preview{inset:76px 12px 91px;height:auto;max-height:none;transform:none}.project-card .card-footer{bottom:29px;left:25px}}
+
+/* Match the mobile poster to the scrolling page scale: fit its full width. */
+@media(max-width:1023px){.inline-screen .inline-poster{inset:0 auto auto 0;width:100%;height:auto;object-fit:contain;object-position:50% 0}}
