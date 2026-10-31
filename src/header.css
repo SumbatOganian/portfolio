@@ -1,0 +1,23 @@
+.mobile-menu,.menu-backdrop{display:none}
+@media(max-width:1023px){
+ .site-header .navigation{display:none}
+ .site-header .monogram,.site-header .menu-toggle{z-index:3;position:relative}
+ .site-header .menu-toggle{gap:0;position:relative}
+ .site-header .menu-toggle span{position:absolute;left:10px;top:21px;transition:transform .35s cubic-bezier(.22,1,.36,1);transform:translateY(-4px)}
+ .site-header .menu-toggle span+span{transform:translateY(4px)}
+ .menu-is-open .menu-toggle span{transform:rotate(45deg)}
+ .menu-is-open .menu-toggle span+span{transform:rotate(-45deg)}
+ .menu-backdrop{display:block;position:fixed;inset:0;z-index:1;background:#0006;backdrop-filter:blur(5px);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .45s,visibility .45s}
+ .mobile-menu{display:block;position:fixed;inset:96px 0 0;z-index:2;margin:0;padding:14px 7% max(28px,env(safe-area-inset-bottom));border:1px solid #ffffff24;border-bottom:0;border-radius:30px 30px 0 0;background:linear-gradient(145deg,#202124f5,#0c0d0ffb 65%);box-shadow:0 -20px 80px #0004;transform:translateY(105%);visibility:hidden;transition:transform .65s cubic-bezier(.22,1,.36,1),visibility .65s;touch-action:pan-x;overflow:auto;overscroll-behavior:contain}
+ .menu-is-open .mobile-menu{transform:translateY(var(--sheet-drag,0px));visibility:visible}
+ .menu-is-open .menu-backdrop{opacity:1;visibility:visible;pointer-events:auto}
+ .mobile-menu[data-dragging=true]{transition:none;user-select:none}
+ .menu-grip{width:38px;height:3px;border-radius:3px;background:#ffffff50;margin:0 auto 42px}
+ .mobile-menu-links{display:flex;flex-direction:column;align-items:stretch}
+ .mobile-menu-links a{display:block;padding:18px 0;font-size:clamp(32px,8vw,56px);font-variation-settings:'wdth' 105,'wght' 420;letter-spacing:-.045em;line-height:1.25;color:#fff;border-bottom:1px solid #ffffff1c;opacity:0;transform:translateY(20px);transition:opacity .35s,transform .5s cubic-bezier(.22,1,.36,1)}
+ .menu-is-open .mobile-menu-links a{opacity:1;transform:none;transition-delay:.12s}
+ .menu-is-open .mobile-menu-links a:nth-child(2){transition-delay:.17s}
+ .menu-is-open .mobile-menu-links a:nth-child(3){transition-delay:.22s}
+}
+@media(max-height:500px) and (max-width:1023px){.mobile-menu{top:82px}.menu-grip{margin-bottom:12px}.mobile-menu-links a{font-size:30px;padding:10px 0}}
+@media(prefers-reduced-motion:reduce){.mobile-menu,.menu-backdrop,.mobile-menu-links a,.site-header .menu-toggle span{transition:none}}

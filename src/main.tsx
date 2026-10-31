@@ -12,7 +12,7 @@ import {startupStep,startupFinished,visualStartupReady} from './startup';
 import {PortraitJourney} from './PortraitJourney';
 import {KineticText} from './KineticText';
 import {ProjectPreview} from './ProjectPreview';
-import {ShuffleNavLink} from './ShuffleNavLink';
+import {SiteHeader} from './SiteHeader';
 import './art-direction-v4.css';
 gsap.registerPlugin(ScrollTrigger);
 startupStep('interface');
@@ -29,9 +29,8 @@ function App(){
  const [reduced,setReduced]=useState(()=>matchMedia('(prefers-reduced-motion: reduce)').matches);
  const [staticMode,setStaticMode]=useState(false);
  const [preview,setPreview]=useState<(typeof projects)[number]|null>(null);
- const [menu,setMenu]=useState(false),[noGL,setNoGL]=useState(false);
+ const [noGL,setNoGL]=useState(false);
  const scrollTo=(section:Section,projectIndex?:number,instant=false)=>{
-  setMenu(false);
   if(section==='contact'){const contact=document.getElementById('contact')!;const top=contact.dataset.scrollTarget?Number(contact.dataset.scrollTarget):contact.getBoundingClientRect().top+window.scrollY;window.scrollTo({top,behavior:instant?'instant':'smooth'});return;}
   if(reduced||noGL||staticMode){document.getElementById(section==='projects'&&projectIndex!==undefined?`project-${projectIndex}`:section)?.scrollIntoView({behavior:instant?'instant':'smooth'});return;}
   let p=section==='projects'&&motion.current.mobile?.205:targets[section];
@@ -122,7 +121,7 @@ function App(){
  const flat=reduced||noGL||staticMode;
  return <div className={flat?'app flat':'app'}>
   <a className="skip-link" href="#project-0" onClick={e=>{e.preventDefault();scrollTo('projects',0,true);document.querySelector<HTMLAnchorElement>('#project-0 .card-site-arrow')?.focus({preventScroll:true})}}>Перейти к проектам</a>
-  <header className="site-header"><a className="monogram" href="#hero" aria-label="В начало" onClick={e=>{e.preventDefault();scrollTo('hero')}}>SO</a><nav aria-label="Основная навигация" className={menu?'navigation open':'navigation'}>{(['projects','skills','contact'] as Section[]).map((s,i)=><ShuffleNavLink key={s} href={`#${s}`} label={['Проекты','Навыки','Контакты'][i]} reduceMotion={flat} onClick={e=>{e.preventDefault();scrollTo(s)}}/>)}</nav><button className="menu-toggle" onClick={()=>setMenu(!menu)} aria-expanded={menu} aria-label={menu?'Закрыть меню':'Открыть меню'}><span/><span/></button></header>
+  <SiteHeader onNavigate={scrollTo} reduceMotion={flat}/>
   <main ref={track} className="scroll-track"><div ref={stage} className="stage">
    <div className="ambient" aria-hidden="true"/><div className="scene-curtain" aria-hidden="true"/>{!flat&&<canvas ref={canvas} className="scene" aria-hidden="true"/>}
    <section id="hero" className="hero"><p className="eyebrow"><span className="status-dot"/>{config.roleLabel}</p><h1><KineticText text="ИДЕИ. КОД."/><KineticText text="РЕЗУЛЬТАТ."/></h1><p className="hero-description">{config.heroDescription}</p><a className="projects-cta" href="#projects" onClick={e=>{e.preventDefault();scrollTo('projects',0)}}><span>Смотреть проекты</span><Arrow/></a><span className="hero-social"><a href={config.githubUrl} target="_blank" rel="noopener noreferrer" aria-label="GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={siGithub.path}/></svg></a></span><div className="hero-scroll" aria-hidden="true"><i/><span>SCROLL</span></div></section>

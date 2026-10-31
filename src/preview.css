@@ -6,3 +6,6 @@ html{scrollbar-gutter:stable}.project-open{position:absolute;inset:0;display:blo
 
 /* First viewport stays visible until the full scroll capture has loaded. */
 .inline-screen .inline-poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 0;will-change:auto}.inline-screen .inline-poster[hidden]{display:none}.inline-scroll-image{position:relative}.inline-loading{z-index:1;text-shadow:0 1px 5px #000}.project-card .card-footer{z-index:3;right:80px;pointer-events:none}.project-card .card-footer h3{color:#ececea;background:none;padding:0;text-shadow:none}
+
+/* Mobile screen fills the space between Preview and the project title. */
+@media(max-width:1023px){.inline-preview{inset:76px 12px 91px;height:auto;max-height:none;transform:none}.project-card .card-footer{bottom:29px;left:25px}}
