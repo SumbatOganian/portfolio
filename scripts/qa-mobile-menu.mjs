@@ -19,6 +19,7 @@ for(const [name,engine] of [['chrome',chromium],['webkit',webkit]]){
   await page.screenshot({path:`qa/mobile-menu/${name}-open.png`});
   await page.mouse.move(180,120);await page.mouse.down();await page.mouse.move(180,270,{steps:8});await page.mouse.up();await page.waitForTimeout(1200);
   assert.equal(await button.getAttribute('aria-expanded'),'false');assert.equal(await page.locator('main').evaluate(el=>el.inert),false);assert.equal(await page.evaluate(()=>scrollY),y);
+  await button.click();await page.waitForTimeout(1200);await page.keyboard.press('Enter');assert.equal(await button.getAttribute('aria-expanded'),'false');await page.waitForTimeout(1000);
   await button.click();await button.click();await page.waitForTimeout(1200);assert.equal(await button.getAttribute('aria-expanded'),'false');
   await button.click();await page.keyboard.press('Escape');assert.equal(await button.getAttribute('aria-expanded'),'false');
   await button.click();await page.waitForTimeout(1200);await panel.locator('a').first().click();await page.waitForTimeout(1800);assert.equal(await button.getAttribute('aria-expanded'),'false');

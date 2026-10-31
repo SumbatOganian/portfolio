@@ -33,7 +33,7 @@ export function SiteHeader({onNavigate,reduceMotion}:{onNavigate:(section:Sectio
   if(g.distance>8){event.currentTarget.setPointerCapture(event.pointerId);event.currentTarget.dataset.dragging='true';event.currentTarget.style.setProperty('--sheet-drag',`${g.distance}px`)}
  };
  const dragEnd=()=>{const g=gesture.current;if(!g.active)return;g.active=false;panel.current?.removeAttribute('data-dragging');panel.current?.style.removeProperty('--sheet-drag');if(g.distance>80||(g.distance>30&&g.distance/Math.max(1,performance.now()-g.time)>.5))setOpen(false)};
- const links=(mobile=false)=>(['projects','skills','contact'] as const).map((section,i)=><ShuffleNavLink key={section} href={`#${section}`} label={['Проекты','Навыки','Контакты'][i]} reduceMotion={reduceMotion} onClick={event=>{event.preventDefault();if(mobile&&gesture.current.distance>8)return;navigate(section)}}/>);
+ const links=(mobile=false)=>(['projects','skills','contact'] as const).map((section,i)=><ShuffleNavLink key={section} href={`#${section}`} label={['Проекты','Навыки','Контакты'][i]} reduceMotion={reduceMotion} onClick={event=>{event.preventDefault();if(mobile&&event.detail>0&&gesture.current.distance>8)return;navigate(section)}}/>);
  return <header ref={header} className={`site-header${open?' menu-is-open':''}`}>
   <a className="monogram" href="#hero" aria-label="В начало" onClick={event=>{event.preventDefault();navigate('hero')}}>SO</a>
   <nav className="navigation" aria-label="Основная навигация">{links()}</nav>
