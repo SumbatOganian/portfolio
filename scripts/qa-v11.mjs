@@ -32,8 +32,8 @@ try{
   // Native vertical wheel drives the horizontal finale.
   await page.mouse.wheel(0,280);await page.waitForTimeout(1100);assert.ok(+(await page.locator('.journey-stage').getAttribute('data-pan'))>0);
   await page.locator('.navigation a[href="#contact"]').evaluate(el=>el.click());await page.waitForFunction(()=>+document.querySelector('.journey-stage').dataset.pan>.999);await page.waitForTimeout(300);await finalFits(page);
-  await page.locator('.back-to-start').click();await page.waitForFunction(()=>scrollY<2);await page.waitForTimeout(200);
-  results.push(`${name}: horizontal movement at constant screen height; reverse scroll, native wheel, Contact navigation and up arrow work; no horizontal page overflow`);
+  await page.locator('.site-header .monogram').click();await page.waitForFunction(()=>scrollY<2);await page.waitForTimeout(200);
+  results.push(`${name}: horizontal movement at constant screen height; reverse scroll, native wheel, Contact navigation and header logo work; no horizontal page overflow`);
   await at(page,.85);await page.waitForTimeout(800);
   await page.evaluate(()=>new Promise(resolve=>{const el=document.querySelector('#person'),from=el.offsetTop+(el.offsetHeight-innerHeight)*.85,to=el.offsetTop+el.offsetHeight-innerHeight,start=performance.now();function draw(now){const p=Math.min(1,(now-start)/6800);scrollTo(0,from+(to-from)*p);if(p<1)requestAnimationFrame(draw);else resolve()}requestAnimationFrame(draw)}));await page.waitForTimeout(1100);
   const video=page.video();await ctx.close();await video.saveAs(`qa/v11/${name}-horizontal-finale.webm`);await video.delete();
