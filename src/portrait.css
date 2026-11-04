@@ -145,17 +145,6 @@
   margin: 0;
 }
 
-.hero-social .hero-phone {
-  display: inline-flex;
-  justify-content: center;
-  gap: 8px;
-  width: auto;
-  padding-inline: 12px;
-  border-radius: 999px;
-  white-space: nowrap;
-  font-size: 11px;
-}
-
 @media (max-width: 1023px) {
   .hero-actions {
     column-gap: 8px;

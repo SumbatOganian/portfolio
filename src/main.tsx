@@ -172,9 +172,8 @@ function App(){
      <a className="projects-cta" href="#projects" onClick={e=>{e.preventDefault();scrollTo('projects',0)}}><span>Смотреть проекты</span><Arrow/></a>
      <span className="hero-social">
       <a href={config.githubUrl} target="_blank" rel="noopener noreferrer" aria-label="GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={siGithub.path}/></svg></a>
-      <a className="hero-phone" href={`tel:${config.phoneNumber.replace(/[^+\d]/g,'')}`} aria-label={`Позвонить: ${config.phoneNumber}`}>
+      <a href={`tel:${config.phoneNumber.replace(/[^+\d]/g,'')}`} aria-label="Позвонить">
        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3H4a1 1 0 0 0-1 1 17 17 0 0 0 17 17 1 1 0 0 0 1-1v-3l-5-2-2 2a13 13 0 0 1-7-7l2-2-2-5Z" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/></svg>
-       <span>{config.phoneNumber}</span>
       </a>
      </span>
     </div><div className="hero-scroll" aria-hidden="true"><i/><span>SCROLL</span></div></section>
