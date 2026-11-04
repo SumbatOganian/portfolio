@@ -4,6 +4,7 @@ import gsap from 'gsap';import {ScrollTrigger} from 'gsap/ScrollTrigger';
 import config from '../data/site-config.json';
 import {ScrollTypeText} from './ScrollTypeText';
 import {SocialLinks} from './SocialLinks';import {FluidBackdrop} from './FluidBackdrop';
+import '@fontsource/cormorant-garamond/latin-500-italic.css';
 import './portrait.css';
 const storyLines=[['Меня вдохновляет то, как технологии','меняют привычные вещи.'],['Я постоянно учусь —','и превращаю любопытство в код.'],['Хочу создавать продукты,','которые делают чью-то жизнь лучше.']];
 const clamp=(v:number)=>Math.max(0,Math.min(1,v));const ease=(v:number)=>{v=clamp(v);return v*v*(3-2*v)};

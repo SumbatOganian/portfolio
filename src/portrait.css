@@ -103,3 +103,50 @@
     grid-column: 2;
   }
 }
+
+@media (min-width: 1024px) {
+  .final-bottom {
+    bottom: clamp(6px, 1.2vh, 16px);
+    gap: clamp(16px, 3vh, 36px);
+  }
+
+  .final-links {
+    order: -1;
+    margin-top: 0;
+  }
+
+  .final-links .social-icons a {
+    width: clamp(80px, 9.2vw, 132px);
+    height: auto;
+    aspect-ratio: 1;
+  }
+
+  .final-links .social-icons svg {
+    width: clamp(34px, 3.75vw, 54px);
+    height: auto;
+  }
+
+  .final-links .back-to-start {
+    width: clamp(100px, 11.67vw, 168px);
+    height: auto;
+    aspect-ratio: 1;
+  }
+
+  .final-links .back-to-start svg {
+    width: clamp(57px, 6.46vw, 93px);
+    height: auto;
+  }
+
+  .signature {
+    line-height: 1.22;
+  }
+
+  .signature span:last-child {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-style: italic;
+    font-weight: 500;
+    font-variation-settings: normal;
+    letter-spacing: -.045em;
+    padding-inline-end: .04em;
+  }
+}
