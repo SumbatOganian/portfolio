@@ -12,3 +12,7 @@ html{scrollbar-gutter:stable}.project-open{position:absolute;inset:0;display:blo
 
 /* Match the mobile poster to the scrolling page scale: fit its full width. */
 @media(max-width:1023px){.inline-screen .inline-poster{inset:0 auto auto 0;width:100%;height:auto;object-fit:contain;object-position:50% 0}}
+
+.project-card {
+  cursor: pointer;
+}

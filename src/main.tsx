@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -21,22 +21,66 @@ const clamp=(v:number,a=0,b=1)=>Math.max(a,Math.min(b,v));
 const mix=(a:number,b:number,t:number)=>a+(b-a)*t;
 const smooth=(v:number)=>{const t=clamp(v);return t*t*(3-2*t)};
 const targets={hero:0,projects:.39,skills:.84,contact:.98};
+const projectStart = (mobile: boolean) => mobile ? .205 : targets.projects;
+const projectStep = (mobile: boolean) => mobile ? .119 : .079;
 type Section=keyof typeof targets;
 function Arrow({down=false}:{down?:boolean}){return <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d={down?'M12 4v16m-6-6 6 6 6-6':'M5 19 19 5M5 5h14v14'} stroke="currentColor" strokeWidth="1.3"/></svg>}
 function App(){
  const track=useRef<HTMLDivElement>(null),stage=useRef<HTMLDivElement>(null),canvas=useRef<HTMLCanvasElement>(null);
+ const stageScroll = useRef<ScrollTrigger | null>(null);
  const motion=useRef({progress:0,pointerX:0,pointerY:0,mobile:false});
  const [reduced,setReduced]=useState(()=>matchMedia('(prefers-reduced-motion: reduce)').matches);
  const [staticMode,setStaticMode]=useState(false);
  const [preview,setPreview]=useState<(typeof projects)[number]|null>(null);
  const [noGL,setNoGL]=useState(false);
- const scrollTo=(section:Section,projectIndex?:number,instant=false)=>{
+ const flat = reduced || noGL || staticMode;
+ const scrollTo=useCallback((section:Section,projectIndex?:number,instant=false)=>{
   if(section==='contact'){const contact=document.getElementById('contact')!;const top=contact.dataset.scrollTarget?Number(contact.dataset.scrollTarget):contact.getBoundingClientRect().top+window.scrollY;window.scrollTo({top,behavior:instant?'instant':'smooth'});return;}
-  if(reduced||noGL||staticMode){document.getElementById(section==='projects'&&projectIndex!==undefined?`project-${projectIndex}`:section)?.scrollIntoView({behavior:instant?'instant':'smooth'});return;}
-  let p=section==='projects'&&motion.current.mobile?.205:targets[section];
-  if(projectIndex!==undefined)p=motion.current.mobile?.205+projectIndex*.119:.39+projectIndex*.079;
+  if(flat){document.getElementById(section==='projects'&&projectIndex!==undefined?`project-${projectIndex}`:section)?.scrollIntoView({behavior:instant?'instant':'smooth'});return;}
+  const mobile = innerWidth < 1024;
+  const p = section === 'projects'
+   ? projectStart(mobile) + (projectIndex ?? 0) * projectStep(mobile)
+   : targets[section];
   window.scrollTo({top:track.current!.offsetTop+p*(track.current!.offsetHeight-innerHeight),behavior:instant?'instant':'smooth'});
- };
+  if (instant) {
+   ScrollTrigger.update();
+   stageScroll.current?.getTween()?.progress(1);
+  }
+ }, [flat]);
+ const selectProject = useCallback((index: number) => {
+  scrollTo('projects', index, true);
+  document.getElementById(`project-${index}`)?.focus({preventScroll: true});
+ }, [scrollTo]);
+ useEffect(() => {
+  function onArrow(event: KeyboardEvent) {
+   if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+   if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey ||
+       track.current?.inert || document.documentElement.hasAttribute('data-startup-loading')) return;
+   if (event.target instanceof Element && event.target.closest('input, textarea, select, [contenteditable]')) return;
+
+   let current: number;
+   if (flat) {
+    const cards = [...(stage.current?.querySelectorAll<HTMLElement>('.project-card') ?? [])];
+    const visible = cards.map((card, index) => ({card, index, box: card.getBoundingClientRect()}))
+     .filter(({box}) => box.bottom > 0 && box.top < innerHeight);
+    const active = visible.find(({card}) => card.contains(document.activeElement)) ??
+     visible.sort((a, b) => Math.abs(a.box.top + a.box.height / 2 - innerHeight / 2) -
+      Math.abs(b.box.top + b.box.height / 2 - innerHeight / 2))[0];
+    if (!active) return;
+    current = active.index;
+   } else {
+    const {progress, mobile} = motion.current;
+    if (progress < .14 || progress >= .79) return;
+    current = Math.round(clamp((progress - projectStart(mobile)) / projectStep(mobile), 0, projects.length - 1));
+   }
+
+   event.preventDefault();
+   const next = clamp(current + (event.key === 'ArrowRight' ? 1 : -1), 0, projects.length - 1);
+   selectProject(next);
+  }
+  window.addEventListener('keydown', onArrow);
+  return () => window.removeEventListener('keydown', onArrow);
+ }, [flat, selectProject]);
  useEffect(()=>{const q=matchMedia('(prefers-reduced-motion: reduce)');const update=()=>setReduced(q.matches);q.addEventListener('change',update);return()=>q.removeEventListener('change',update)},[]);
  useEffect(()=>{
   document.fonts.ready.then(()=>startupStep('fonts'));
@@ -92,7 +136,7 @@ function App(){
      opacity=(enter>0?1:0)*(1-smooth((p-.755)/.035));
      card.style.setProperty('--shade',String(leave*.23));z=5+i;
     }else{
-     const entry=smooth((p-(.16+i*.033))/.13),focus=clamp((p-.39)/.316)*4,d=i-focus;
+     const entry=smooth((p-(.16+i*.033))/.13),focus=clamp((p-projectStart(false))/projectStep(false),0,cards.length-1),d=i-focus;
      const gx=d*Math.min(innerWidth*.235,355),gy=Math.abs(d)*Math.abs(d)*27;
      x=mix(innerWidth*.21,gx,entry);y=mix(0,gy,entry);
      scale=mix(.10,Math.max(.47,1-Math.abs(d)*.16),entry);rotate=mix(-18,-d*9,entry);
@@ -111,14 +155,14 @@ function App(){
    root.querySelectorAll<HTMLElement>('[data-nav]').forEach(el=>el.dataset.active=String(el.dataset.nav===(p<.15?'hero':p<.79?'projects':'skills')));
   }
   const trigger=ScrollTrigger.create({trigger:track.current,start:'top top',end:'bottom bottom',scrub:.55,animation:gsap.fromTo(motion.current,{progress:0},{progress:1,ease:'none',onUpdate:()=>render(motion.current.progress)}),onRefresh:()=>{measureSkillTravel();render(motion.current.progress)}});
+  stageScroll.current = trigger;
   render(trigger.progress);
   const skillObserver=new IntersectionObserver(entries=>{skillsInView=entries[0].isIntersecting});skillObserver.observe(root);
   gsap.ticker.add(floatSkills);
   const pointer=(e:PointerEvent)=>{motion.current.pointerX=(e.clientX/innerWidth-.5)*2;motion.current.pointerY=(e.clientY/innerHeight-.5)*2};
   window.addEventListener('pointermove',pointer);
-  return()=>{trigger.animation?.kill();trigger.kill();gsap.ticker.remove(floatSkills);skillObserver.disconnect();window.removeEventListener('pointermove',pointer)};
+  return()=>{stageScroll.current=null;trigger.animation?.kill();trigger.kill();gsap.ticker.remove(floatSkills);skillObserver.disconnect();window.removeEventListener('pointermove',pointer)};
  },[reduced,noGL,staticMode]);
- const flat=reduced||noGL||staticMode;
  return <div className={flat?'app flat':'app'}>
   <a className="skip-link" href="#project-0" onClick={e=>{e.preventDefault();scrollTo('projects',0,true);document.querySelector<HTMLAnchorElement>('#project-0 .card-site-arrow')?.focus({preventScroll:true})}}>Перейти к проектам</a>
   <SiteHeader onNavigate={scrollTo} reduceMotion={flat}/>
@@ -127,7 +171,9 @@ function App(){
    <section id="hero" className="hero"><p className="eyebrow"><span className="status-dot"/>{config.roleLabel}</p><h1><KineticText text="ИДЕИ. КОД."/><KineticText text="РЕЗУЛЬТАТ."/></h1><p className="hero-description">{config.heroDescription}</p><a className="projects-cta" href="#projects" onClick={e=>{e.preventDefault();scrollTo('projects',0)}}><span>Смотреть проекты</span><Arrow/></a><span className="hero-social"><a href={config.githubUrl} target="_blank" rel="noopener noreferrer" aria-label="GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={siGithub.path}/></svg></a></span><div className="hero-scroll" aria-hidden="true"><i/><span>SCROLL</span></div></section>
    <div className="hero-caption" aria-hidden="true">DIGITAL<br/>MATTER<span>CODE INTO FORM</span></div>
    <div id="projects" className="gallery-title"><p className="eyebrow">02 / ИЗБРАННЫЕ РАБОТЫ</p><h2>Код обретает форму.</h2><span>05 РЕАЛЬНЫХ ПРОЕКТОВ <i>↗</i></span></div>
-   <div className="gallery" aria-label="Проекты">{projects.map((p,i)=><article key={p.id} id={`project-${i}`} className="project-card" aria-label={p.name} onFocus={()=>{if(!flat)scrollTo('projects',i,true)}}><div className="card-surface"><div className="glass-sheen" aria-hidden="true"/></div><ProjectPreview reduceMotion={flat} project={p} active={preview?.id===p.id}/><div className="card-footer"><h3>{p.name}</h3></div><a className="card-site-arrow" href={p.url} target="_blank" rel="noopener noreferrer" aria-label={`Открыть сайт ${p.name}`}><Arrow/></a><button className="preview-toggle" aria-label={`Preview ${p.name}`} aria-expanded={preview?.id===p.id} aria-controls={`inline-preview-${p.id}`} onClick={()=>setPreview(preview?.id===p.id?null:p)}>Preview <i aria-hidden="true"/></button></article>)}</div>
+   <div className="gallery" aria-label="Проекты">{projects.map((p,i)=><article key={p.id} id={`project-${i}`} className="project-card" aria-label={p.name} tabIndex={-1}
+    onFocus={event=>{if(!flat && event.target !== event.currentTarget) scrollTo('projects',i,true)}}
+    onClick={event=>{if (!(event.target instanceof Element && event.target.closest('a, button'))) selectProject(i)}}><div className="card-surface"><div className="glass-sheen" aria-hidden="true"/></div><ProjectPreview reduceMotion={flat} project={p} active={preview?.id===p.id}/><div className="card-footer"><h3>{p.name}</h3></div><a className="card-site-arrow" href={p.url} target="_blank" rel="noopener noreferrer" aria-label={`Открыть сайт ${p.name}`}><Arrow/></a><button className="preview-toggle" aria-label={`Preview ${p.name}`} aria-expanded={preview?.id===p.id} aria-controls={`inline-preview-${p.id}`} onClick={()=>setPreview(preview?.id===p.id?null:p)}>Preview <i aria-hidden="true"/></button></article>)}</div>
    <section id="skills" className="skills"><p className="eyebrow">03 / ИНСТРУМЕНТЫ</p><h2>Логика. Форма.<br/><span>Взаимодействие.</span></h2><div className="skill-orbit">{skills.filter(s=>s.show).map((s,i)=><div className={`skill skill-${i}`} key={s.id} tabIndex={0}><svg style={{fill:["#419dd6","#44b78b","#f7df1e","#e9673d","#f05032"][i]}} viewBox="0 0 24 24" aria-hidden="true"><path d={icons[i].path}/></svg><span>{s.name}</span></div>)}</div></section>
    <aside className="chapter-nav" aria-label="Этапы портфолио"><span className="chapter-current">01</span><div className="progress-track"><i className="progress-fill"/></div>{(['hero','projects','skills','contact'] as Section[]).map((s,i)=><button key={s} data-nav={s} onClick={()=>scrollTo(s)} aria-label={['Начало','Проекты','Навыки','Контакты'][i]}>{['Идеи','Проекты','Навыки','Контакты'][i]}</button>)}</aside>
    <footer className="stage-footer"><span>SUMBAT OGANIAN <i>—</i> PORTFOLIO</span><span className="scroll-hint">ЛИСТАЙТЕ, ЧТОБЫ ИССЛЕДОВАТЬ <Arrow down/></span>{!reduced&&!noGL&&<button className="motion-toggle" onClick={()=>{setStaticMode(!staticMode);window.scrollTo(0,0)}} aria-pressed={staticMode}>{staticMode?'Включить анимацию':'Без анимации'}</button>}</footer>
