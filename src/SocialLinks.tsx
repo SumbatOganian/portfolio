@@ -1,4 +1,6 @@
 import {siGithub,siInstagram,siTelegram,siVk} from 'simple-icons';
 import config from '../data/site-config.json';
-const icons:Record<string,string>={github:siGithub.path,instagram:siInstagram.path,telegram:siTelegram.path,vk:siVk.path};
+const icons:Record<string,string>={github:siGithub.path,instagram:siInstagram.path,telegram:siTelegram.path,vk:siVk.path,
+ headhunter:'M2 4h3v7a5 5 0 0 1 3.5-1.5c2.6 0 3.5 1.7 3.5 4V20H9v-6c0-1.2-.6-1.8-1.6-1.8S5 13 5 14.4V20H2V4zm11 0h3v7a5 5 0 0 1 3.5-1.5c2.6 0 3.5 1.7 3.5 4V20h-3v-6c0-1.2-.6-1.8-1.6-1.8s-2.4.8-2.4 2.2V20h-3V4z'
+};
 export function SocialLinks({className=''}:{className?:string}){return <nav className={`social-icons ${className}`} aria-label="Социальные сети и связь">{config.socials.map(s=><a key={s.id} href={s.url} aria-label={s.label} target="_blank" rel="noopener noreferrer"><span className="social-icon-inner">{icons[s.id]?<svg viewBox="0 0 24 24" aria-hidden="true"><path d={icons[s.id]}/></svg>:<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 11.6a8.5 8.5 0 0 1-8.5 8.5c-1.3 0-2.5-.3-3.6-.8L3.5 21l1.4-4.6a8.5 8.5 0 1 1 15.6-4.8Z" fill="none" stroke="currentColor" strokeWidth="1.5"/><path d="M7.6 14.5v-6l4.4 4 4.4-4v6" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round"/></svg>}</span><span className="social-tooltip">{s.label}</span></a>)}</nav>}

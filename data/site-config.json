@@ -45,6 +45,11 @@
       "id": "github",
       "label": "GitHub",
       "url": "https://github.com/SumbatOganian"
+    },
+    {
+      "id": "headhunter",
+      "label": "Резюме на HH.ru",
+      "url": "https://sochi.hh.ru/resume/02a22a48ff1038f5810039ed1f455754433659"
     }
   ],
   "about": {

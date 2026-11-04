@@ -86,3 +86,20 @@
 @media(max-width:899px){.about-body{--type-ink:#dededb}}
 @media(max-width:699px){.portrait-frame .portrait-negative{object-fit:cover}}
 .journey-static .portrait-negative-layer{display:none}
+
+@media (max-width: 420px) {
+  .final-links:has(.social-icons a:nth-child(6)) {
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 8px;
+  }
+  .final-links:has(.social-icons a:nth-child(6)) .social-icons {
+    grid-column: 1;
+    gap: 6px;
+  }
+  .final-links:has(.social-icons a:nth-child(6)) .social-icons a {
+    width: clamp(34px, 9vw, 40px);
+  }
+  .final-links:has(.social-icons a:nth-child(6)) .back-to-start {
+    grid-column: 2;
+  }
+}
