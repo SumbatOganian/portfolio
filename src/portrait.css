@@ -131,3 +131,33 @@
     padding-inline-end: .04em;
   }
 }
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 15px;
+}
+
+.hero-actions .hero-social {
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+
+.hero-social .hero-phone {
+  display: inline-flex;
+  justify-content: center;
+  gap: 8px;
+  width: auto;
+  padding-inline: 12px;
+  border-radius: 999px;
+  white-space: nowrap;
+  font-size: 11px;
+}
+
+@media (max-width: 1023px) {
+  .hero-actions {
+    column-gap: 8px;
+  }
+}

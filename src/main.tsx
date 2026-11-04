@@ -168,7 +168,16 @@ function App(){
   <SiteHeader onNavigate={scrollTo} reduceMotion={flat}/>
   <main ref={track} className="scroll-track"><div ref={stage} className="stage">
    <div className="ambient" aria-hidden="true"/><div className="scene-curtain" aria-hidden="true"/>{!flat&&<canvas ref={canvas} className="scene" aria-hidden="true"/>}
-   <section id="hero" className="hero"><p className="eyebrow"><span className="status-dot"/>{config.roleLabel}</p><h1><KineticText text="ИДЕИ. КОД."/><KineticText text="РЕЗУЛЬТАТ."/></h1><p className="hero-description">{config.heroDescription}</p><a className="projects-cta" href="#projects" onClick={e=>{e.preventDefault();scrollTo('projects',0)}}><span>Смотреть проекты</span><Arrow/></a><span className="hero-social"><a href={config.githubUrl} target="_blank" rel="noopener noreferrer" aria-label="GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={siGithub.path}/></svg></a></span><div className="hero-scroll" aria-hidden="true"><i/><span>SCROLL</span></div></section>
+   <section id="hero" className="hero"><p className="eyebrow"><span className="status-dot"/>{config.roleLabel}</p><h1><KineticText text="ИДЕИ. КОД."/><KineticText text="РЕЗУЛЬТАТ."/></h1><p className="hero-description">{config.heroDescription}</p><div className="hero-actions">
+     <a className="projects-cta" href="#projects" onClick={e=>{e.preventDefault();scrollTo('projects',0)}}><span>Смотреть проекты</span><Arrow/></a>
+     <span className="hero-social">
+      <a href={config.githubUrl} target="_blank" rel="noopener noreferrer" aria-label="GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={siGithub.path}/></svg></a>
+      <a className="hero-phone" href={`tel:${config.phoneNumber.replace(/[^+\d]/g,'')}`} aria-label={`Позвонить: ${config.phoneNumber}`}>
+       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3H4a1 1 0 0 0-1 1 17 17 0 0 0 17 17 1 1 0 0 0 1-1v-3l-5-2-2 2a13 13 0 0 1-7-7l2-2-2-5Z" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/></svg>
+       <span>{config.phoneNumber}</span>
+      </a>
+     </span>
+    </div><div className="hero-scroll" aria-hidden="true"><i/><span>SCROLL</span></div></section>
    <div className="hero-caption" aria-hidden="true">DIGITAL<br/>MATTER<span>CODE INTO FORM</span></div>
    <div id="projects" className="gallery-title"><p className="eyebrow">02 / ИЗБРАННЫЕ РАБОТЫ</p><h2>Код обретает форму.</h2><span>05 РЕАЛЬНЫХ ПРОЕКТОВ <i>↗</i></span></div>
    <div className="gallery" aria-label="Проекты">{projects.map((p,i)=><article key={p.id} id={`project-${i}`} className="project-card" aria-label={p.name} tabIndex={-1}
