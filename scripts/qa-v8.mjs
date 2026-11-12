@@ -2,6 +2,7 @@ import {chromium,webkit,devices} from 'playwright';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 await fs.mkdir('qa/v8/videos',{recursive:true});
+const projects=JSON.parse(await fs.readFile('data/projects.json','utf8'));
 const results=[],errors=[],base='http://127.0.0.1:4173';
 async function stageAt(page,progress){
  await page.evaluate(p=>{const el=document.querySelector('.scroll-track');scrollTo(0,el.offsetTop+(el.offsetHeight-innerHeight)*p)},progress);
@@ -15,10 +16,10 @@ try{
   const context=await browser.newContext({viewport:{width,height},recordVideo:{dir:'qa/v8/videos',size:{width,height}}});
   const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));
   await page.goto(base);await page.evaluate(()=>document.fonts.ready);await page.waitForTimeout(800);
-  assert.equal(await page.locator('.gallery a').count(),5);
-  assert.equal(await page.locator('.card-footer h3').count(),5);
+  assert.equal(await page.locator('.gallery a').count(),projects.length);
+  assert.equal(await page.locator('.card-footer h3').count(),projects.length);
   assert.equal(await page.locator('.inline-screen h3').count(),0);
-  for(let i=0;i<5;i++){
+  for(let i=0;i<projects.length;i++){
    const card=page.locator(`#project-${i}`),toggle=card.locator('.preview-toggle');
    await toggle.focus();await page.waitForTimeout(650);
    await card.locator('.inline-poster').evaluate(img=>img.decode());
@@ -33,7 +34,7 @@ try{
    await toggle.click();assert.equal(await card.locator('.inline-scroll-image').count(),0);
    assert.ok(await card.locator('.inline-poster').isVisible());
   }
-  results.push(`${name}: all five cards show real first frames; Preview on/off works inside the card; titles remain below with no badge; only arrows link out`);
+  results.push(`${name}: all project cards show real first frames; Preview on/off works inside the card; titles remain below with no badge; only arrows link out`);
   await page.locator('#project-2 .preview-toggle').focus();await page.waitForTimeout(700);await page.screenshot({path:`qa/v8/${name}-idle.png`});
   await stageAt(page,.90);const start=await skillState(page);
   await stageAt(page,.95);const middle=await skillState(page);

@@ -21,8 +21,11 @@ const clamp=(v:number,a=0,b=1)=>Math.max(a,Math.min(b,v));
 const mix=(a:number,b:number,t:number)=>a+(b-a)*t;
 const smooth=(v:number)=>{const t=clamp(v);return t*t*(3-2*t)};
 const targets={hero:0,projects:.39,skills:.84,contact:.98};
-const projectStart = (mobile: boolean) => mobile ? .205 : targets.projects;
-const projectStep = (mobile: boolean) => mobile ? .119 : .079;
+const mobileProjectEntry = .14;
+const mobileProjectEntryDuration = .065;
+const projectStart = (mobile: boolean) => mobile ? mobileProjectEntry + mobileProjectEntryDuration : targets.projects;
+const projectStep = (mobile: boolean) => ((mobile ? .681 : .706) - projectStart(mobile)) /
+ Math.max(1, projects.length - 1);
 type Section=keyof typeof targets;
 function Arrow({down=false}:{down?:boolean}){return <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d={down?'M12 4v16m-6-6 6 6 6-6':'M5 19 19 5M5 5h14v14'} stroke="currentColor" strokeWidth="1.3"/></svg>}
 function App(){
@@ -131,7 +134,9 @@ function App(){
    cards.forEach((card,i)=>{
     let opacity=1,x=0,y=0,scale=1,rotate=0,z=4;
     if(mobile){
-     const enter=clamp((p-(.14+i*.119))/.065),leave=clamp((p-(.14+(i+1)*.119))/.065);
+     const entryStart = mobileProjectEntry + i * projectStep(true);
+     const enter = clamp((p - entryStart) / mobileProjectEntryDuration);
+     const leave = clamp((p - entryStart - projectStep(true)) / mobileProjectEntryDuration);
      y=(1-enter)*(innerHeight*.95)-leave*22;scale=1-leave*.075;
      opacity=(enter>0?1:0)*(1-smooth((p-.755)/.035));
      card.style.setProperty('--shade',String(leave*.23));z=5+i;
@@ -178,7 +183,7 @@ function App(){
      </span>
     </div><div className="hero-scroll" aria-hidden="true"><i/><span>SCROLL</span></div></section>
    <div className="hero-caption" aria-hidden="true">DIGITAL<br/>MATTER<span>CODE INTO FORM</span></div>
-   <div id="projects" className="gallery-title"><p className="eyebrow">02 / ИЗБРАННЫЕ РАБОТЫ</p><h2>Код обретает форму.</h2><span>05 РЕАЛЬНЫХ ПРОЕКТОВ <i>↗</i></span></div>
+   <div id="projects" className="gallery-title"><p className="eyebrow">02 / ИЗБРАННЫЕ РАБОТЫ</p><h2>Код обретает форму.</h2><span>{String(projects.length).padStart(2, '0')} РЕАЛЬНЫХ ПРОЕКТА <i>↗</i></span></div>
    <div className="gallery" aria-label="Проекты">{projects.map((p,i)=><article key={p.id} id={`project-${i}`} className="project-card" aria-label={p.name} tabIndex={-1}
     onFocus={event=>{if(!flat && event.target !== event.currentTarget) scrollTo('projects',i,true)}}
     onClick={event=>{if (!(event.target instanceof Element && event.target.closest('a, button'))) selectProject(i)}}><div className="card-surface"><div className="glass-sheen" aria-hidden="true"/></div><ProjectPreview reduceMotion={flat} project={p} active={preview?.id===p.id}/><div className="card-footer"><h3>{p.name}</h3></div><a className="card-site-arrow" href={p.url} target="_blank" rel="noopener noreferrer" aria-label={`Открыть сайт ${p.name}`}><Arrow/></a><button className="preview-toggle" aria-label={`Preview ${p.name}`} aria-expanded={preview?.id===p.id} aria-controls={`inline-preview-${p.id}`} onClick={()=>setPreview(preview?.id===p.id?null:p)}>Preview <i aria-hidden="true"/></button></article>)}</div>
